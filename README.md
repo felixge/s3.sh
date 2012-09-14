@@ -12,5 +12,5 @@ Returns an url suitable for making a GET request to a private s3 object.
 
 Dependencies:
 
-* date
+* date, if ${expires} parameter is not provided
 * openssl
