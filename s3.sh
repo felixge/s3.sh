@@ -1,3 +1,5 @@
+# send patches to: https://github.com/felixge/s3.sh
+
 s3_sign_url() {
   local awsKey=${1}
   local awsSecret=${2}
