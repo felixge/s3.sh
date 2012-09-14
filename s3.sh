@@ -15,7 +15,7 @@ s3_signed_url() {
   local awsKey=${4}
   local awsSecret=${5}
   # Unix epoch number, defaults to 60 seconds in the future
-  local expires=${6:-`date -v+60S +%s`}
+  local expires=${6:-$((`date +%s`+60))}
 
   local stringToSign="${httpMethod}\n\n\n${expires}\n/${bucket}/${path}"
 

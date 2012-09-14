@@ -11,7 +11,7 @@ s3_url ${bucket} ${path}
 Returns a url for the given ${bucket} and ${path}.
 
 ```bash
-s3_signed_url ${httpMethod} ${bucket} ${path} ${awsKey} ${awsSecret} ${expires:-`date -v+60S +%s`}
+s3_signed_url ${httpMethod} ${bucket} ${path} ${awsKey} ${awsSecret} ${expires:-$((`date +%s`+60))}
 ```
 
 Returns a signed url, suitable for making requests to a private s3 object.
