@@ -10,9 +10,9 @@ s3_sign_url() {
 
   local stringToSign="GET\n\n\n${expires}\n/${bucket}/${path}"
 
-  local base64Signature=`echo -en "${stringToSign}" |\
-    openssl dgst -sha1 -binary -hmac ${awsSecret} |\
-    openssl base64`
+  local base64Signature=`echo -en "${stringToSign}" \
+    | openssl dgst -sha1 -binary -hmac ${awsSecret} \
+    | openssl base64`
 
   # Escape all base64 special characters ('+', '=', '\') for url
   local escapedSignature=${base64Signature}
