@@ -1,6 +1,14 @@
 # send patches to: https://github.com/felixge/s3.sh
 
-s3_sign_url() {
+s3_url() {
+  local bucket=${1}
+  local path=${2}
+  local url="http://s3.amazonaws.com/${bucket}/${path}"
+
+  echo ${url}
+}
+
+s3_signed_url() {
   local httpMethod=${1}
   local bucket=${2}
   local path=${3}
@@ -19,7 +27,7 @@ s3_sign_url() {
   local escapedAwsKey=`_s3_urlencode ${awsKey}`
 
   local query="Expires=${expires}&AWSAccessKeyId=${escapedAwsKey}&Signature=${escapedSignature}"
-  local url="http://s3.amazonaws.com/${bucket}/${path}?${query}"
+  local url="`s3_url ${bucket} ${path}`?${query}"
 
   echo ${url}
 }

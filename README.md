@@ -5,10 +5,16 @@ Bash functions for Amazon S3. (Not complete, just scratching my itch)
 # API
 
 ```bash
-s3_sign_url ${httpMethod} ${bucket} ${path} ${awsKey} ${awsSecret} ${expires:-`date -v+60S +%s`}
+s3_url ${bucket} ${path}
 ```
 
-Returns an url suitable for making a GET request to a private s3 object.
+Returns a url for the given ${bucket} and ${path}.
+
+```bash
+s3_signed_url ${httpMethod} ${bucket} ${path} ${awsKey} ${awsSecret} ${expires:-`date -v+60S +%s`}
+```
+
+Returns a signed url, suitable for making requests to a private s3 object.
 
 Dependencies:
 
