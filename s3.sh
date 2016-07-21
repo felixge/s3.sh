@@ -3,7 +3,7 @@
 s3_url() {
   local bucket=${1}
   local path=${2}
-  local url="http://s3.amazonaws.com/${bucket}/${path}"
+  local url="https://s3.amazonaws.com/${bucket}/${path}"
 
   echo ${url}
 }
