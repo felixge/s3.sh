@@ -3,7 +3,7 @@
 s3_url() {
   local bucket=${1}
   local path=${2}
-  local url="http://s3.amazonaws.com/${bucket}/${path}"
+  local url="https://s3-eu-west-1.amazonaws.com/${bucket}/${path}"
 
   echo ${url}
 }
@@ -16,8 +16,13 @@ s3_signed_url() {
   local awsSecret=${5}
   # Unix epoch number, defaults to 60 seconds in the future
   local expires=${6:-$((`date +%s`+60))}
+  local awsToken=${7}
 
-  local stringToSign="${httpMethod}\n\n\n${expires}\n/${bucket}/${path}"
+  if [ -n "${awsToken}" ]; then
+	  local stringToSign="${httpMethod}\n\n\n${expires}\nx-amz-security-token:${awsToken}\n/${bucket}/${path}"
+  else
+	  local stringToSign="${httpMethod}\n\n\n${expires}\n/${bucket}/${path}"
+  fi
 
   local base64Signature=`echo -en "${stringToSign}" \
     | openssl dgst -sha1 -binary -hmac ${awsSecret} \
@@ -26,7 +31,13 @@ s3_signed_url() {
   local escapedSignature=`_s3_urlencode ${base64Signature}`
   local escapedAwsKey=`_s3_urlencode ${awsKey}`
 
-  local query="Expires=${expires}&AWSAccessKeyId=${escapedAwsKey}&Signature=${escapedSignature}"
+  if [ -n "${awsToken}" ]; then
+	  local escapedAwsToken=`_s3_urlencode ${awsToken}`
+	  local query="Expires=${expires}&AWSAccessKeyId=${escapedAwsKey}&Signature=${escapedSignature}&x-amz-security-token=${escapedAwsToken}"
+  else
+	  local query="Expires=${expires}&AWSAccessKeyId=${escapedAwsKey}&Signature=${escapedSignature}"
+  fi
+  echo "url=s3_url ${bucket} ${path}?${query}"
   local url="`s3_url ${bucket} ${path}`?${query}"
 
   echo ${url}
